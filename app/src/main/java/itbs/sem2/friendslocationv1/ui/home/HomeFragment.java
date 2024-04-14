@@ -2,6 +2,7 @@ package itbs.sem2.friendslocationv1.ui.home;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,11 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.NameValuePair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -141,10 +151,40 @@ public class HomeFragment extends Fragment {
                     TextView textViewLongitude = convertView.findViewById(R.id.textViewLongitude);
                     // Mettez à jour les vues avec les données de la position actuelle
                     textViewPseudo.setText(currentPosition.getPseudo());
-                   // String locationText = "Latitude: " + currentPosition.getLatitude() + "\nLongitude: " + currentPosition.getLongitude();
+                    // String locationText = "Latitude: " + currentPosition.getLatitude() + "\nLongitude: " + currentPosition.getLongitude();
 
                     textViewLatitude.setText(currentPosition.getLatitude() );
                     textViewLongitude.setText(currentPosition.getLongitude());
+                    // Obtenez les références des vues de mise en page, y compris l'icône de suppression
+                    ImageView imageViewDelete = convertView.findViewById(R.id.imageViewDelete);
+
+                    // Ajouter un écouteur de clic à l'icône de suppression
+                    imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Récupérer l'ID de la position à supprimer
+                            int positionId = currentPosition.getIdPosition();
+
+                            // Afficher une boîte de dialogue de confirmation
+                            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                            builder.setTitle("Confirmation de suppression");
+                            builder.setMessage("Voulez-vous vraiment supprimer cette position ?");
+                            builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Envoyer une demande de suppression au serveur PHP
+                                    new DeletePositionTask(requireContext()).execute(positionId);
+                                }
+                            });
+                            builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Ne rien faire si l'utilisateur annule la suppression
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
 
                     return convertView;
                 }
@@ -152,6 +192,54 @@ public class HomeFragment extends Fragment {
 
             // Attachez l'adaptateur à la ListView pour afficher les données
             binding.lvPosition.setAdapter(adapter);
+        }
+    }
+
+    class DeletePositionTask extends AsyncTask<Integer, Void, Void> {
+        Context context;
+        AlertDialog dialog;
+
+        public DeletePositionTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Afficher la boîte de dialogue
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Suppression de la position");
+            builder.setMessage("Veuillez patienter...");
+            dialog = builder.create();
+            dialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Integer... positionIds) {
+            int positionId = positionIds[0];
+            JSONParser parser = new JSONParser();
+            // Construire les paramètres de la demande
+            HashMap<String, String> params = new HashMap<>();
+            params.put("idposition", String.valueOf(positionId));
+
+            // Faire la demande de suppression au serveur PHP
+            JSONObject response = parser.makeHttpRequest(Config.URL_DeletePosition, "POST", params);
+
+            // Gérer la réponse si nécessaire
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            // Gérer les actions après la suppression si nécessaire
+            // Réexécuter le téléchargement des données pour mettre à jour la liste
+            new Telechargement(context).execute();
         }
     }
 }

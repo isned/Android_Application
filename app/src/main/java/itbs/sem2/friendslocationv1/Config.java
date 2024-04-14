@@ -10,4 +10,5 @@ public class Config {
     public static final String IP="192.168.1.18";
     public static final String URL_GETALL="http://"+IP+"/servicephp/get_all.php";
     public static final String URL_AddPosition="http://"+IP+"/servicephp/add_position.php";
+    public static final String URL_DeletePosition="http://"+IP+"/servicephp/delete_position.php";
 }
