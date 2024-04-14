@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/imageViewDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete"
-        android:layout_gravity="end"/>
-
-
     <LinearLayout
+        android:id="@+id/infoLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -21,18 +14,35 @@
 
         <TextView
             android:id="@+id/textViewPseudo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textViewLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"/>
+            android:id="@+id/textViewLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Latitude:"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Longitude:"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imageViewDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/baseline_delete_forever_24" />
+
+</RelativeLayout>

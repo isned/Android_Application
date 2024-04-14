@@ -27,67 +27,30 @@ public class JSONParser {
     StringBuilder sbParams;
     String paramsString;
 
-    public  JSONObject makeRequest(String url)
-    {
+    public JSONObject makeHttpRequest(String url, String method,
+                                      HashMap<String, String> params) {
 
-        try {
-            urlObj = new URL(url);
+        sbParams = new StringBuilder();
+        if (params != null) {
+            int i = 0;
+            for (String key : params.keySet()) {
+                try {
+                    if (i != 0) {
+                        sbParams.append("&");
+                    }
+                    sbParams.append(key).append("=")
+                            .append(URLEncoder.encode(params.get(key), charset));
 
-
-        conn = (HttpURLConnection) urlObj.openConnection();
-        } catch (MalformedURLException e) {
-        e.printStackTrace();
-    } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-                //Receive the response from the server
-                InputStream in = new BufferedInputStream(conn.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                result = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
-
-                Log.d("JSON Parser", "result: " + result.toString());
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                i++;
             }
-
-            conn.disconnect();
-
-            // try parse the string to a JSON object
-            try {
-                jObj = new JSONObject(result.toString());
-            } catch (JSONException e) {
-                Log.e("JSON Parser", "Error parsing data " + e.toString());
-            }
-
-            // return JSON Object
-            return jObj;
         }
-    public  JSONObject makeHttpRequest(String url, String method,
-                                      HashMap<String,String> params) {
 
-    sbParams = new StringBuilder();
-    if(params!=null) {
-    int i = 0;
-    for (String key : params.keySet()) {
-        try {
-            if (i != 0) {
-                sbParams.append("&");
-            }
-            sbParams.append(key).append("=")
-                    .append(URLEncoder.encode(params.get(key), charset));
+        // Initialise result ici
+        result = new StringBuilder();
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        i++;
-    }
-}
         if (method.equals("POST")) {
             // request method is POST
             try {
@@ -109,7 +72,7 @@ public class JSONParser {
                 paramsString = sbParams.toString();
 
                 wr = new DataOutputStream(conn.getOutputStream());
-                if(params!=null) {
+                if (params != null) {
                     wr.writeBytes(paramsString);
                     wr.flush();
                     wr.close();
@@ -118,8 +81,7 @@ public class JSONParser {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else if(method.equals("GET")){
+        } else if (method.equals("GET")) {
             // request method is GET
 
             if (sbParams.length() != 0) {
@@ -151,7 +113,6 @@ public class JSONParser {
             //Receive the response from the server
             InputStream in = new BufferedInputStream(conn.getInputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            result = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 result.append(line);

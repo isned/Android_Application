@@ -7,7 +7,7 @@ public class Config {
      * LAN:reseau local : IPV4 : 192.168
      * Internet:www......
      */
-    public static final String IP="192.168.1.19";
+    public static final String IP="192.168.1.18";
     public static final String URL_GETALL="http://"+IP+"/servicephp/get_all.php";
     public static final String URL_AddPosition="http://"+IP+"/servicephp/add_position.php";
 }

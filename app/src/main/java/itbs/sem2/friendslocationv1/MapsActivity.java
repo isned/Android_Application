@@ -80,10 +80,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
+                // Ajouter un marqueur à la position sélectionnée par l'utilisateur
+                mMap.clear(); // Supprimer les anciens marqueurs
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Selected Location"));
+
+                // Créer un nouvel Intent pour envoyer les coordonnées en tant que résultat
                 Intent resultIntent = new Intent();
-                // Envoyer les coordonnées en tant que chaîne unique dans l'intent
+                // Convertir les coordonnées en chaîne unique et les ajouter à l'Intent
                 resultIntent.setData(Uri.parse(latLng.latitude + "," + latLng.longitude));
+
+                // Définir le résultat de l'activité comme OK avec l'Intent contenant les coordonnées
                 setResult(Activity.RESULT_OK, resultIntent);
+
+                // Terminer l'activité actuelle
                 finish();
             }
 

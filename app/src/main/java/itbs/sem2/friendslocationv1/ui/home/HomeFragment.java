@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import itbs.sem2.friendslocationv1.Config;
 import itbs.sem2.friendslocationv1.JSONParser;
 import itbs.sem2.friendslocationv1.MapsActivity;
+import itbs.sem2.friendslocationv1.MapsActivity2;
 import itbs.sem2.friendslocationv1.Position;
 import itbs.sem2.friendslocationv1.R;
 import itbs.sem2.friendslocationv1.databinding.FragmentHomeBinding;
@@ -53,14 +54,15 @@ public class HomeFragment extends Fragment {
                 // Récupérer la position sélectionnée
                 Position selectedPosition = data.get(position);
 
-                // Créer un Intent pour passer les informations de la position à l'activité de la carte
-                Intent intent = new Intent(requireContext(), MapsActivity.class);
-                intent.putExtra("longitude", selectedPosition.getLongitude());
+                // Créer un Intent pour passer les informations de la position à MapsActivity2
+                Intent intent = new Intent(requireContext(), MapsActivity2.class);
                 intent.putExtra("latitude", selectedPosition.getLatitude());
+                intent.putExtra("longitude", selectedPosition.getLongitude());
                 intent.putExtra("pseudo", selectedPosition.getPseudo());
                 startActivity(intent);
             }
         });
+
 
         return root;
     }
@@ -135,13 +137,14 @@ public class HomeFragment extends Fragment {
 
                     // Obtenez les références des vues de mise en page
                     TextView textViewPseudo = convertView.findViewById(R.id.textViewPseudo);
-                    TextView textViewLocation = convertView.findViewById(R.id.textViewLocation);
-
+                    TextView textViewLatitude = convertView.findViewById(R.id.textViewLatitude);
+                    TextView textViewLongitude = convertView.findViewById(R.id.textViewLongitude);
                     // Mettez à jour les vues avec les données de la position actuelle
                     textViewPseudo.setText(currentPosition.getPseudo());
-                    String locationText = "Latitude: " + currentPosition.getLatitude() + "\nLongitude: " + currentPosition.getLongitude();
+                   // String locationText = "Latitude: " + currentPosition.getLatitude() + "\nLongitude: " + currentPosition.getLongitude();
 
-                    textViewLocation.setText(locationText);
+                    textViewLatitude.setText(currentPosition.getLatitude() );
+                    textViewLongitude.setText(currentPosition.getLongitude());
 
                     return convertView;
                 }
