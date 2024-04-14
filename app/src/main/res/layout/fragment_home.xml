@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/img"
     tools:context=".ui.home.HomeFragment" >
 
     <TextView
@@ -13,8 +14,8 @@
         android:layout_height="wrap_content"
         android:text="Liste des positions"
         android:textAlignment="center"
-        android:textColor="@color/purple_700"
-        android:textSize="28sp" />
+        android:textColor="@color/teal_200"
+        android:textSize="32sp" />
 
     <Button
         android:id="@+id/btntelechargement"
